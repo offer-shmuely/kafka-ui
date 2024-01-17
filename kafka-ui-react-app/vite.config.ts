@@ -7,6 +7,7 @@ import {
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { ViteEjsPlugin } from 'vite-plugin-ejs';
+import { parse, stringify } from 'lossless-json';
 
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
@@ -46,7 +47,7 @@ export default defineConfig(({ mode }) => {
       ) {
         if (hostType === 'js') {
           return {
-            runtime: `window.__assetsPathBuilder(${JSON.stringify(filename)})`,
+            runtime: `window.__assetsPathBuilder(${stringify(filename)})`,
           };
         }
 

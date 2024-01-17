@@ -7,6 +7,7 @@ import { RouterParamsClusterConnectConnector } from 'lib/paths';
 import yup from 'lib/yupExtended';
 import Editor from 'components/common/Editor/Editor';
 import { Button } from 'components/common/Button/Button';
+import { parse, stringify } from 'lossless-json';
 import {
   useConnectorConfig,
   useUpdateConnectorConfig,
@@ -40,19 +41,19 @@ const Config: React.FC = () => {
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      config: JSON.stringify(config, null, '\t'),
+      config: stringify(config, null, '\t'),
     },
   });
 
   React.useEffect(() => {
     if (config) {
-      setValue('config', JSON.stringify(config, null, '\t'));
+      setValue('config', stringify(config, null, '\t'));
     }
   }, [config, setValue]);
 
   const onSubmit = async (values: FormValues) => {
     try {
-      const requestBody = JSON.parse(values.config.trim());
+      const requestBody = parse(values.config.trim());
       await mutation.mutateAsync(requestBody);
       reset(values);
     } catch (e) {
@@ -60,7 +61,7 @@ const Config: React.FC = () => {
     }
   };
 
-  const hasCredentials = JSON.stringify(config, null, '\t').includes(
+  const hasCredentials = stringify(config, null, '\t').includes(
     '"******"'
   );
   return (

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import useDataSaver from 'lib/hooks/useDataSaver';
 import { render } from '@testing-library/react';
 import { showAlert } from 'lib/errorHandling';
+import { parse, stringify } from 'lossless-json';
 
 jest.mock('lib/errorHandling', () => ({
   ...jest.requireActual('lib/errorHandling'),
@@ -59,7 +60,7 @@ describe('useDataSaver hook', () => {
       };
       render(<HookWrapper />);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-        JSON.stringify(content)
+        stringify(content)
       );
     });
 

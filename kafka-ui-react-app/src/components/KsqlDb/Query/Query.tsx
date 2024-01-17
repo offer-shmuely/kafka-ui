@@ -2,6 +2,7 @@ import React from 'react';
 import useAppParams from 'lib/hooks/useAppParams';
 import TableRenderer from 'components/KsqlDb/Query/renderer/TableRenderer/TableRenderer';
 import { ClusterNameRoute } from 'lib/paths';
+import { parse, stringify } from 'lossless-json';
 import {
   useExecuteKsqlkDbQueryMutation,
   useKsqlkDbSSE,
@@ -32,7 +33,7 @@ const Query = () => {
           ...values,
           streamsProperties:
             values.streamsProperties[0].key !== ''
-              ? JSON.parse(JSON.stringify(streamsProperties))
+              ? parse(stringify(streamsProperties))
               : undefined,
         },
       },

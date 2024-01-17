@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import { messagesApiClient } from 'lib/api';
 import { StopLoading } from 'components/Topics/Topic/Messages/Messages.styled';
+import { parse, stringify } from 'lossless-json';
 
 interface UseTopicMessagesProps {
   clusterName: ClusterName;
@@ -109,7 +110,7 @@ export const useTopicMessages = ({
           }
         },
         onmessage(event) {
-          const parsedData: TopicMessageEvent = JSON.parse(event.data);
+          const parsedData: TopicMessageEvent = parse(event.data);
           const { message, consuming } = parsedData;
 
           switch (parsedData.type) {

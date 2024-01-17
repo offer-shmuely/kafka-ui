@@ -1,4 +1,5 @@
 import { showAlert, showSuccessAlert } from 'lib/errorHandling';
+import { parse, stringify } from 'lossless-json';
 
 const useDataSaver = (
   subject: string,
@@ -7,7 +8,7 @@ const useDataSaver = (
   const copyToClipboard = () => {
     if (navigator.clipboard) {
       const str =
-        typeof data === 'string' ? String(data) : JSON.stringify(data);
+        typeof data === 'string' ? String(data) : stringify(data);
       navigator.clipboard.writeText(str);
       showSuccessAlert({
         id: subject,

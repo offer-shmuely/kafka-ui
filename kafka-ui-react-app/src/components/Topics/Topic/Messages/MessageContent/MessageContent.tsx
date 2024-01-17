@@ -5,6 +5,7 @@ import { SchemaType, TopicMessageTimestampTypeEnum } from 'generated-sources';
 import { formatTimestamp } from 'lib/dateTimeHelpers';
 
 import * as S from './MessageContent.styled';
+import { parse, stringify } from 'lossless-json';
 
 type Tab = 'key' | 'content' | 'headers';
 
@@ -39,7 +40,7 @@ const MessageContent: React.FC<MessageContentProps> = ({
       case 'key':
         return messageKey;
       default:
-        return JSON.stringify(headers);
+        return stringify(headers);
     }
   };
 

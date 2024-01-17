@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 
 import { TOPIC_NAME_VALIDATION_PATTERN } from './constants';
+import { parse, stringify } from 'lossless-json';
 
 declare module 'yup' {
   interface StringSchema<
@@ -22,7 +23,7 @@ export const isValidJsonObject = (value?: string) => {
       trimmedValue.indexOf('{') === 0 &&
       trimmedValue.lastIndexOf('}') === trimmedValue.length - 1
     ) {
-      JSON.parse(trimmedValue);
+      parse(trimmedValue);
       return true;
     }
   } catch {

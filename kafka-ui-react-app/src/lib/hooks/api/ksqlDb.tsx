@@ -16,6 +16,7 @@ import {
 } from 'generated-sources';
 import { StopLoading } from 'components/Topics/Topic/Messages/Messages.styled';
 import toast from 'react-hot-toast';
+import { parse, stringify } from 'lossless-json';
 
 export function useKsqlkDb(clusterName: ClusterName) {
   return useQueries({
@@ -107,7 +108,7 @@ export const useKsqlkDbSSE = ({ clusterName, pipeId }: UseKsqlkDbSSEProps) => {
             }
           },
           onmessage(event) {
-            const { table }: KsqlResponse = JSON.parse(event.data);
+            const { table }: KsqlResponse = parse(event.data);
             if (!table) {
               return;
             }

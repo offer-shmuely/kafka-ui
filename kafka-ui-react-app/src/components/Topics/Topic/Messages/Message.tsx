@@ -12,6 +12,7 @@ import Tooltip from 'components/common/Tooltip/Tooltip';
 
 import MessageContent from './MessageContent/MessageContent';
 import * as S from './MessageContent/MessageContent.styled';
+import { parse, stringify } from 'lossless-json';
 
 export interface PreviewFilter {
   field: string;
@@ -51,7 +52,7 @@ const Message: React.FC<Props> = ({
     Timestamp: timestamp,
   };
 
-  const savedMessage = JSON.stringify(savedMessageJson, null, '\t');
+  const savedMessage = stringify(savedMessageJson, null, '\t');
   const { copyToClipboard, saveFile } = useDataSaver(
     'topic-message',
     savedMessage || ''
@@ -63,7 +64,7 @@ const Message: React.FC<Props> = ({
 
   const getParsedJson = (jsonValue: string) => {
     try {
-      return JSON.parse(jsonValue);
+      return parse(jsonValue);
     } catch (e) {
       return {};
     }
@@ -82,7 +83,7 @@ const Message: React.FC<Props> = ({
           return (
             <div key={`${item.path}--${item.field}`}>
               {item.field}:{' '}
-              {JSON.stringify(
+              {stringify(
                 JSONPath({ path: item.path, json: parsedJson, wrap: false })
               )}
             </div>

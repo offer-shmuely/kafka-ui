@@ -4,6 +4,7 @@ import EditorViewer, {
 } from 'components/common/EditorViewer/EditorViewer';
 import { render } from 'lib/testHelpers';
 import { screen } from '@testing-library/react';
+import { parse, stringify } from 'lossless-json';
 
 const data = { a: 1 };
 const maxLines = 28;
@@ -15,7 +16,7 @@ describe('EditorViewer component', () => {
 
   it('renders JSONTree', () => {
     setupComponent({
-      data: JSON.stringify(data),
+      data: stringify(data),
       maxLines,
       schemaType,
     });

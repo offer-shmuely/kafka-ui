@@ -3,6 +3,7 @@ import { KsqlTableResponse } from 'generated-sources';
 import TableHeaderCell from 'components/common/table/TableHeaderCell/TableHeaderCell';
 import { nanoid } from '@reduxjs/toolkit';
 import { TableTitle } from 'components/common/table/TableTitle/TableTitle.styled';
+import { parse, stringify } from 'lossless-json';
 
 import * as S from './TableRenderer.styled';
 
@@ -17,7 +18,7 @@ function hasJsonStructure(str: string | Record<string, unknown>): boolean {
 
   if (typeof str === 'string') {
     try {
-      const result = JSON.parse(str);
+      const result = parse(str);
       const type = Object.prototype.toString.call(result);
       return type === '[object Object]' || type === '[object Array]';
     } catch (err) {
@@ -37,7 +38,7 @@ const TableRenderer: React.FC<TableRendererProps> = ({ table }) => {
           return {
             id: nanoid(),
             value: hasJsonStructure(cell)
-              ? JSON.stringify(cell, null, 2)
+              ? stringify(cell, null, 2)
               : cell,
           };
         }),

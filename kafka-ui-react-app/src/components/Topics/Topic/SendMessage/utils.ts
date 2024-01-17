@@ -8,6 +8,7 @@ import { compact } from 'lodash';
 import Ajv, { DefinedError } from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
 import upperFirst from 'lodash/upperFirst';
+import { parse, stringify } from 'lossless-json';
 
 jsf.option('fillProperties', false);
 jsf.option('alwaysFakeOptionals', true);
@@ -17,9 +18,9 @@ const generateValueFromSchema = (preferred?: SerdeDescription) => {
   if (!preferred?.schema) {
     return undefined;
   }
-  const parsedSchema = JSON.parse(preferred.schema);
+  const parsedSchema = parse(preferred.schema);
   const value = jsf.generate(parsedSchema);
-  return JSON.stringify(value);
+  return stringify(value);
 };
 
 export const getPreferredDescription = (serdes: SerdeDescription[]) =>
@@ -69,7 +70,7 @@ export const validateBySchema = (
   let parsedValue;
 
   try {
-    parsedSchema = JSON.parse(schema);
+    parsedSchema = parse(schema);
   } catch (e) {
     return [`Error in parsing the "${type}" field schema`];
   }
@@ -77,7 +78,7 @@ export const validateBySchema = (
     return [];
   }
   try {
-    parsedValue = JSON.parse(value);
+    parsedValue = parse(value);
   } catch (e) {
     return [`Error in parsing the "${type}" field value`];
   }

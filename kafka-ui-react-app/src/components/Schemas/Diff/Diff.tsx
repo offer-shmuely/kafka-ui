@@ -21,6 +21,7 @@ import PageHeading from 'components/common/PageHeading/PageHeading';
 
 import * as S from './Diff.styled';
 import { BackButton } from './Diff.styled';
+import { parse, stringify } from 'lossless-json';
 
 export interface DiffProps {
   versions: SchemaSubject[];
@@ -58,7 +59,7 @@ const Diff: React.FC<DiffProps> = ({ versions, areVersionsFetched }) => {
       allVersions.find((s) => s.version === version)?.schema ||
       (allVersions.length ? allVersions[0].schema : '');
     return selectedSchema.trim().startsWith('{')
-      ? JSON.stringify(JSON.parse(selectedSchema), null, '\t')
+      ? stringify(parse(selectedSchema), null, '\t')
       : selectedSchema;
   };
   const getSchemaType = (allVersions: SchemaSubject[]) => {

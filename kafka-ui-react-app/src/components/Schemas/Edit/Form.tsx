@@ -32,6 +32,7 @@ import { showServerError } from 'lib/errorHandling';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormError } from 'components/common/Input/Input.styled';
 import { ErrorMessage } from '@hookform/error-message';
+import { parse, stringify } from 'lossless-json';
 
 import * as S from './Edit.styled';
 
@@ -48,7 +49,7 @@ const Form: React.FC = () => {
   const formatedSchema = React.useMemo(() => {
     return schema?.schemaType === SchemaType.PROTOBUF
       ? schema?.schema
-      : JSON.stringify(JSON.parse(schema?.schema || '{}'), null, '\t');
+      : stringify(parse(schema?.schema || '{}'), null, '\t');
   }, [schema]);
 
   const validationSchema = () =>

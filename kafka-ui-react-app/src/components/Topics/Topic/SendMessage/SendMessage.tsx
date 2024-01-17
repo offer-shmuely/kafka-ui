@@ -19,6 +19,8 @@ import {
   getSerdeOptions,
   validateBySchema,
 } from './utils';
+import { parse, stringify } from 'lossless-json';
+
 
 interface FormType {
   key: string;
@@ -88,7 +90,7 @@ const SendMessage: React.FC<{ closeSidebar: () => void }> = ({
     let parsedHeaders;
     if (headers) {
       try {
-        parsedHeaders = JSON.parse(headers);
+        parsedHeaders = parse(headers);
       } catch (error) {
         errors.push('Wrong header format');
       }

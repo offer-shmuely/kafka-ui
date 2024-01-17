@@ -20,6 +20,7 @@ import Heading from 'components/common/heading/Heading.styled';
 import { useConnects, useCreateConnector } from 'lib/hooks/api/kafkaConnect';
 import get from 'lodash/get';
 import { Connect } from 'generated-sources';
+import { parse, stringify } from 'lossless-json';
 
 import * as S from './New.styled';
 
@@ -70,7 +71,7 @@ const New: React.FC = () => {
         connectName: values.connectName,
         newConnector: {
           name: values.name,
-          config: JSON.parse(values.config.trim()),
+          config: parse(values.config.trim()),
         },
       });
 

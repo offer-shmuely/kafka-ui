@@ -47,6 +47,7 @@ import {
   getSelectedPartitionsFromSeekToParam,
   getTimestampFromSeekToParam,
 } from './utils';
+import { parse, stringify } from 'lossless-json';
 
 type Query = Record<string, string | string[] | number>;
 
@@ -139,15 +140,15 @@ const Filters: React.FC<FiltersProps> = ({
   );
 
   const [savedFilters, setSavedFilters] = React.useState<MessageFilters[]>(
-    JSON.parse(localStorage.getItem('savedFilters') ?? '[]')
+    parse(localStorage.getItem('savedFilters') ?? '[]')
   );
 
   let storageActiveFilter = localStorage.getItem('activeFilter');
   storageActiveFilter =
-    storageActiveFilter ?? JSON.stringify({ name: '', code: '', index: -1 });
+    storageActiveFilter ?? stringify({ name: '', code: '', index: -1 });
 
   const [activeFilter, setActiveFilter] = React.useState<ActiveMessageFilter>(
-    JSON.parse(storageActiveFilter)
+    parse(storageActiveFilter)
   );
 
   const [queryType, setQueryType] = React.useState<MessageFilterType>(
@@ -282,7 +283,7 @@ const Filters: React.FC<FiltersProps> = ({
     const filters = [...savedFilters];
     filters.push(newFilter);
     setSavedFilters(filters);
-    localStorage.setItem('savedFilters', JSON.stringify(filters));
+    localStorage.setItem('savedFilters', stringify(filters));
   };
   const deleteFilter = (index: number) => {
     const filters = [...savedFilters];
@@ -292,7 +293,7 @@ const Filters: React.FC<FiltersProps> = ({
       setQueryType(MessageFilterType.STRING_CONTAINS);
     }
     filters.splice(index, 1);
-    localStorage.setItem('savedFilters', JSON.stringify(filters));
+    localStorage.setItem('savedFilters', stringify(filters));
     setSavedFilters(filters);
   };
   const deleteActiveFilter = () => {
@@ -306,7 +307,7 @@ const Filters: React.FC<FiltersProps> = ({
   ) => {
     localStorage.setItem(
       'activeFilter',
-      JSON.stringify({ index, ...newActiveFilter })
+      stringify({ index, ...newActiveFilter })
     );
     setActiveFilter({ index, ...newActiveFilter });
     setQueryType(MessageFilterType.GROOVY_SCRIPT);
@@ -319,7 +320,7 @@ const Filters: React.FC<FiltersProps> = ({
   });
 
   const storeAsActiveFilter = (filter: FilterEdit) => {
-    const messageFilter = JSON.stringify(composeMessageFilter(filter));
+    const messageFilter = stringify(composeMessageFilter(filter));
     localStorage.setItem('activeFilter', messageFilter);
   };
 
@@ -330,7 +331,7 @@ const Filters: React.FC<FiltersProps> = ({
       setActiveFilter(composeMessageFilter(filter));
       storeAsActiveFilter(filter);
     }
-    localStorage.setItem('savedFilters', JSON.stringify(filters));
+    localStorage.setItem('savedFilters', stringify(filters));
     setSavedFilters(filters);
   };
 
@@ -359,7 +360,7 @@ const Filters: React.FC<FiltersProps> = ({
       };
       sse.onmessage = ({ data }) => {
         const { type, message, phase, consuming }: TopicMessageEvent =
-          JSON.parse(data);
+          parse(data);
         switch (type) {
           case TopicMessageEventTypeEnum.MESSAGE:
             if (message) {
